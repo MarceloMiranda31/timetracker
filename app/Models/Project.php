@@ -10,7 +10,15 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function customer(){
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
+    public function customer()
+    {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

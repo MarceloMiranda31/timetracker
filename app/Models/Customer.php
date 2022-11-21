@@ -9,4 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Customer extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

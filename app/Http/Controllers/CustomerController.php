@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -9,11 +10,16 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        //
+        return view(
+            'customers.index',
+            [
+                'customers' => Customer::orderBy('name')->get()
+            ]
+        );
     }
 
     /**
@@ -23,7 +29,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -34,7 +40,17 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'nullable|email',
+            'vat' => 'required|digits:9',
+            'zipcode' => 'nullable',
+            'city' => 'nullable'
+        ]);
+
+        $customer = Customer::create($validated);
+
+        return redirect()->route('clientes.show', ['cliente' => $customer]);
     }
 
     /**
@@ -45,7 +61,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
     }
 
     /**
@@ -56,7 +72,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('customers.edit');
     }
 
     /**
